@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Dish - Royal Panda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'royal-panda-red': '#E11D48',
+            'royal-bg': '#f9f9f9'
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #fff 0%, #f3f4f6 50%, #e5e7eb 100%);
+      font-family: 'Inter', sans-serif;
+    }
+    .glass {
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .input-focus:focus {
+      border-color: #E11D48;
+      box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.25);
+      transition: all 0.15s ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-gray-800 flex flex-col">
+
+  <!-- Navbar -->
+  <%- include('../partials/nav') %>
+
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
+    <div class="glass shadow-2xl border border-gray-200 rounded-2xl p-10 max-w-2xl w-full">
+
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">
+          🍱 Add <span class="text-royal-panda-red">New Dish</span>
+        </h1>
+        <p class="text-gray-500 mt-2 text-sm font-medium">
+          Complete all fields below — the system will detect your price type automatically.
+        </p>
+      </div>
+
+      <!-- Add Dish Form -->
+      <form id="dishForm" action="/host/add-dish" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+        <!-- Category -->
+        <div>
+          <label for="category" class="block font-semibold mb-2">Category</label>
+          <select id="category" name="category" required
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 input-focus bg-white focus:outline-none">
+            <option value="">-- Select Category --</option>
+            <option value="Pizza">Pizza</option>
+            <option value="Burger">Burger</option>
+            <option value="Garlic Bread">Garlic Bread</option>
+            <option value="Pasta">Pasta</option>
+            <option value="Fries">Fries</option>
+            <option value="Sandwich">Sandwich</option>
+            <option value="Wraps">Wraps</option>
+            <option value="Shakes">Shakes</option>
+            <option value="Coffee">Coffee</option>
+            <option value="Desserts">Desserts</option>
+          </select>
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label for="name" class="block font-semibold mb-2">Dish Name</label>
+          <input id="name" name="name" type="text" required placeholder="E.g., Classic Cheese Burger"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 input-focus focus:outline-none bg-white" />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="desc" class="block font-semibold mb-2">Description</label>
+          <textarea id="desc" name="desc" rows="3" required placeholder="Brief description of ingredients and flavor"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 input-focus focus:outline-none bg-white resize-none"></textarea>
+        </div>
+
+        <!-- Price Inputs -->
+        <div>
+          <label class="block font-semibold mb-3">Price (₹)</label>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="flex flex-col">
+              <label for="half" class="text-sm text-gray-500 mb-1">Half</label>
+              <input type="number" name="half" id="half" placeholder="e.g. 90"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 input-focus bg-white" />
+            </div>
+            <div class="flex flex-col">
+              <label for="full" class="text-sm text-gray-500 mb-1">Full</label>
+              <input type="number" name="full" id="full" placeholder="e.g. 160"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 input-focus bg-white" />
+            </div>
+            <div class="flex flex-col">
+              <label for="price" class="text-sm text-gray-500 mb-1">General</label>
+              <input type="number" name="price" id="price" placeholder="e.g. 120"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 input-focus bg-white" />
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">
+            💡 Leave unused fields blank — system decides if dish is "general" or "half-full".
+          </p>
+        </div>
+
+        <!-- Photo Upload -->
+        <div>
+          <label for="photo" class="block font-semibold mb-2">Dish Photo</label>
+          <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50 hover:bg-gray-100 transition">
+            <input type="file" name="photo" id="photo" accept="image/*" required
+              class="block w-full text-sm text-gray-700 cursor-pointer file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-royal-panda-red/10 file:text-royal-panda-red hover:file:bg-royal-panda-red/20 transition" />
+            <p class="text-xs text-gray-500 mt-2">Upload high-quality food image (JPG or PNG)</p>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+          <button type="submit"
+            class="w-full py-3 bg-royal-panda-red text-white font-semibold rounded-lg text-lg hover:bg-red-700 shadow-md hover:shadow-lg transition-all duration-200">
+            ➕ Save & Add Dish
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Auto-detect price type before submission
+    document.getElementById('dishForm').addEventListener('submit', function() {
+      const half = document.getElementById('half').value.trim();
+      const full = document.getElementById('full').value.trim();
+      const general = document.getElementById('price').value.trim();
+
+      let priceType = 'general';
+      if (half || full) priceType = 'half-full';
+
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'priceType';
+      hiddenInput.value = priceType;
+      this.appendChild(hiddenInput);
+    });
+  </script>
+
+</body>
+</html>

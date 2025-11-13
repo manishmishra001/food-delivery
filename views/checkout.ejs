@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Royal Panda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+
+  <div class="max-w-6xl mx-auto py-12 px-4">
+    <h2 class="text-4xl font-extrabold text-center mb-12 text-red-600">Checkout</h2>
+
+    <div class="grid lg:grid-cols-3 gap-10">
+
+      <!-- LEFT SIDE: Address & Payment -->
+      <form action="/checkout" method="POST" class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-lg space-y-6">
+        <h3 class="text-2xl font-semibold mb-4 border-b pb-2">Shipping Details</h3>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-medium mb-1">Full Name</label>
+            <input type="text" name="name" value="<%= user ? user.name : '' %>" required class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Mobile</label>
+            <input type="text" name="mobile" value="<%= user ? user.mobile : '' %>" required maxlength="10" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1">Address</label>
+          <textarea name="address" required rows="3" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-medium mb-1">City</label>
+            <input type="text" name="city" required class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Pincode</label>
+            <input type="text" name="pincode" maxlength="6" required class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-medium mb-1">State</label>
+            <input type="text" name="state" required class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Country</label>
+            <input type="text" name="country" value="India" required class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+          </div>
+        </div>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4 border-b pb-2">Payment Method</h3>
+        <div class="space-y-2">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="radio" name="payment" value="COD" checked class="accent-red-600">
+            <span>Cash on Delivery</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="radio" name="payment" value="Online" class="accent-red-600" id="onlinePayment">
+            <span>Online Payment (Razorpay)</span>
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-xl font-semibold text-lg hover:bg-red-700 transition duration-300">
+          Place Order
+        </button>
+      </form>
+
+      <!-- RIGHT SIDE: Cart Summary -->
+      <div class="bg-white p-6 rounded-3xl shadow-lg h-fit">
+        <h3 class="text-2xl font-semibold mb-6 border-b pb-2">Order Summary</h3>
+
+        <% if (cart && cart.length > 0) { %>
+          <ul class="divide-y divide-gray-200 mb-4">
+            <% cart.forEach(item => { %>
+              <li class="py-3 flex justify-between items-center">
+                <span class="font-medium"><%= item.name %> <span class="text-gray-500">(x<%= item.qty %>)</span></span>
+                <span class="font-semibold">₹<%= item.price * item.qty %></span>
+              </li>
+            <% }) %>
+          </ul>
+          <div class="space-y-2 border-t pt-4">
+            <div class="flex justify-between text-gray-600">
+              <span>Subtotal</span>
+              <span>₹<%= subtotal %></span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+              <span>Delivery Fee</span>
+              <span>₹<%= deliveryFee %></span>
+            </div>
+            <div class="flex justify-between font-bold text-lg">
+              <span>Total</span>
+              <span>₹<%= total %></span>
+            </div>
+          </div>
+        <% } else { %>
+          <p class="text-gray-500">Your cart is empty.</p>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-xl shadow-lg w-96 relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+      <h3 class="text-xl font-semibold mb-2">Notice</h3>
+      <p class="text-gray-700">Online payment will be available soon.</p>
+      <button id="modalOk" class="mt-4 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const onlineRadio = document.getElementById('onlinePayment');
+    const modal = document.getElementById('paymentModal');
+    const closeModal = document.getElementById('closeModal');
+    const modalOk = document.getElementById('modalOk');
+
+    onlineRadio.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+    });
+
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      onlineRadio.checked = false; // optional: uncheck radio
+    });
+
+    modalOk.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      onlineRadio.checked = false; // optional: uncheck radio
+    });
+
+    // Close modal on clicking outside
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        onlineRadio.checked = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
+

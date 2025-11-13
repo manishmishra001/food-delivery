@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart | Royal Panda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-red-50 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <%- include('partials/nav', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
+
+  <!-- Main Section -->
+  <main class="flex-1 max-w-3xl mx-auto w-full p-4">
+    <h2 class="text-3xl font-bold text-red-700 mb-6 text-center">Your Cart</h2>
+
+    <!-- Cart Items Container -->
+    <div id="cart-items" class="flex flex-col gap-4"></div>
+
+    <!-- Total Section -->
+    <div class="mt-6 bg-white p-4 rounded-lg shadow-md">
+      <h3 class="text-xl font-semibold text-gray-800">
+        Total: ₹<span id="cart-total">0</span>
+      </h3>
+      <div class="flex justify-between mt-4">
+        <button onclick="clearCart()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
+          Clear Cart
+        </button>
+        <button onclick="goToCheckout()" class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700">
+          Checkout
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-center py-4 text-gray-600 mt-10">
+    © 2025 Royal Panda. All Rights Reserved.
+  </footer>
+
+  <script>
+    const container = document.getElementById("cart-items");
+    const totalEl = document.getElementById("cart-total");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    console.log("Cart data:", cart);
+
+    // ✅ FIXED IMAGE RESOLVER — shows uploaded dish images correctly
+    function resolveImagePath(photo) {
+      if (!photo) return ""; // no fallback, no panda
+
+      photo = photo.replace(/\\/g, "/"); // normalize slashes
+
+      // If it's already a full URL
+      if (photo.startsWith("http")) return photo;
+
+      // Ensure it begins with /uploads/
+      if (photo.startsWith("/uploads/")) return photo;
+      if (photo.startsWith("uploads/")) return "/" + photo;
+
+      // Extract from longer paths like "public/uploads/xyz"
+      if (photo.includes("uploads/")) {
+        const match = photo.match(/uploads\/.+/i);
+        if (match) return "/" + match[0];
+      }
+
+      // If backend stored only filename
+      return "/uploads/" + photo;
+    }
+
+    function renderCart() {
+      if (!cart.length) {
+        container.innerHTML = `
+          <div class="text-center text-gray-600 mt-20">
+            <p class="text-xl">Your cart is empty 🛒</p>
+            <a href="/menu" class="text-red-600 underline mt-3 inline-block">Browse Menu</a>
+          </div>`;
+        totalEl.textContent = "0";
+        return;
+      }
+
+      let total = 0;
+
+      container.innerHTML = cart.map((item, idx) => {
+        const price = Number(item.price) || 0;
+        const qty = Number(item.qty) || 0;
+        const subtotal = price * qty;
+        total += subtotal;
+
+        const imgPath = resolveImagePath(item.photo);
+
+        return `
+          <div class="bg-white p-4 shadow-sm rounded-lg flex gap-4 items-center">
+            <img src="${imgPath}" 
+                 alt="${item.name}" 
+                 class="w-20 h-20 object-cover rounded-lg border" />
+
+            <div class="flex-1">
+              <h3 class="font-semibold text-lg text-red-600">${item.name || 'Unnamed Dish'}</h3>
+              ${item.size ? `<p class="text-sm text-gray-600">Size: ${item.size}</p>` : ''}
+              <p class="text-sm text-gray-800">Price: ₹${price} × ${qty}</p>
+              <p class="text-sm text-gray-600 font-medium">Subtotal: ₹${subtotal}</p>
+            </div>
+
+            <div class="flex flex-col items-center gap-1">
+              <button onclick="changeQty(${idx}, 1)" class="bg-gray-200 rounded-full w-7 h-7 text-center font-bold">+</button>
+              <span>${qty}</span>
+              <button onclick="changeQty(${idx}, -1)" class="bg-gray-200 rounded-full w-7 h-7 text-center font-bold">−</button>
+              <button onclick="removeItem(${idx})" class="text-xs text-red-600 mt-1 underline">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      totalEl.textContent = total.toFixed(2);
+    }
+
+    function changeQty(index, delta) {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      updateCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function clearCart() {
+      if (confirm("Are you sure you want to clear the cart?")) {
+        cart = [];
+        updateCart();
+      }
+    }
+
+    function updateCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    renderCart();
+
+    // ✅ Checkout handler
+    async function goToCheckout() {
+      const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (cartData.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      const res = await fetch("/sync-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ cart: cartData }),
+      });
+
+      if (res.ok) {
+        window.location.href = "/checkout";
+      } else if (res.status === 401) {
+        window.location.href = "/login";
+      } else {
+        alert("Failed to sync cart before checkout.");
+      }
+    }
+  </script>
+</body>
+</html>

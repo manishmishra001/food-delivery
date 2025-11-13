@@ -1,0 +1,290 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>RoyalPanda - Flavour of Royalty</title>
+      <link rel="stylesheet" href="output.css">
+      <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+      <script src="https://cdn.tailwindcss.com"></script>
+      
+      <script>
+          tailwind.config = {
+              theme: {
+                  extend: {
+                      fontFamily: {
+                          'playfair': ['Playfair Display', 'serif'],
+                          'system': ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'sans-serif'],
+                      },
+                      colors: {
+                          'rp-red': '#cc0011',
+                          'rp-pink': '#ffabb2',
+                          'rp-light-bg': '#fefefe',
+                          'rp-section-bg': '#fbe7e7',
+                          'rp-green': '#d0d091',
+                          'rp-dark': '#0a0a2a',
+                      }
+                  }
+              }
+          }
+      </script>
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  </head>
+  <body class="m-0 p-0 box-border bg-gray-50">
+
+  <div class="section1 min-h-screen w-full bg-cover bg-center bg-[url('/images/hero.png')] relative">
+      
+      <nav class="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-8xl mx-auto px-6 py-3 flex justify-between items-center" id="nav-bar">
+      
+      <!-- Logo -->
+      <div class="flex items-center space-x-3" id="nav-logo">
+        <img src="/images/panda.png" alt="Royal Panda Logo" class="w-10 h-10 rounded-full">
+        <span class="text-white text-2xl md:text-3xl font-bold tracking-wide">
+          Royal <span class="text-rp-pink">Panda</span>
+        </span>
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-8 font-system text-lg">
+        <a href="/" class="text-white hover:text-rp-pink border-b-2 border-transparent hover:border-rp-pink pb-1">Home</a>
+        <a href="/order" class="text-white hover:text-rp-pink border-b-2 border-transparent hover:border-rp-pink pb-1">Menu</a>
+        <a href="/about" class="text-white hover:text-rp-pink border-b-2 border-transparent hover:border-rp-pink pb-1">About</a>
+        <a href="/contact" class="text-white hover:text-rp-pink border-b-2 border-transparent hover:border-rp-pink pb-1">Contact</a>
+
+        <% if (user && user.role === 'admin') { %>
+          <a href="/host/admin" class="text-white hover:text-rp-pink border-b-2 border-transparent hover:border-rp-pink pb-1">Admin</a>
+        <% } %>
+
+        <!-- Cart -->
+        <a href="/cart" class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-rp-pink hover:scale-110 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.2 6h12.4M10 21a1 1 0 11-2 0 1 1 0zm8 0a1 1 0 11-2 0 1 1 0z" />
+          </svg>
+          <span class="absolute -top-2 -right-2 bg-rp-red text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+            <%= cartCount || 0 %>
+          </span>
+        </a>
+
+        <% if (!user) { %>
+          <a href="/auth/signup"
+            class="bg-rp-red text-white px-4 py-2 rounded-full font-semibold hover:bg-red-700 transition duration-200">
+            Sign Up
+          </a>
+        <% } else { %>
+          <form action="/auth/logout" method="POST">
+            <button type="submit"
+              class="bg-gray-700 text-white px-4 py-2 rounded-full font-semibold hover:bg-gray-600 transition duration-200">
+              Logout
+            </button>
+          </form>
+        <% } %>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu"
+      class="fixed top-0 left-0 w-2/3 h-screen bg-black bg-opacity-70 text-white transform -translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col justify-between">
+      
+      <div class="p-6 flex flex-col flex-grow">
+        <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center space-x-3">
+            <img src="/images/panda.png" alt="Royal Panda Logo" class="w-10 h-10 rounded-full">
+            <span class="text-2xl font-bold text-rp-pink">Royal Panda</span>
+          </div>
+          <button id="close-menu" class="text-white focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <ul class="space-y-6 text-lg font-semibold flex-grow">
+          <li><a href="/" class="block hover:text-rp-pink">Home</a></li>
+          <li><a href="/order" class="block hover:text-rp-pink">Menu</a></li>
+          <li><a href="/about" class="block hover:text-rp-pink">About</a></li>
+          <li><a href="/contact" class="block hover:text-rp-pink">Contact</a></li>
+          <% if (user && user.role === "admin") { %>
+            <li><a href="/host/admin" class="block hover:text-rp-pink">Admin</a></li>
+          <% } %>
+        </ul>
+
+        <div class="pt-8">
+          <% if (!user) { %>
+            <a href="/auth/signup"
+              class="block bg-rp-red text-white py-3 text-center rounded-full font-bold hover:bg-red-700 transition">
+              Sign Up
+            </a>
+          <% } else { %>
+            <form action="/auth/logout" method="POST">
+              <button type="submit"
+                class="block bg-gray-700 text-white py-3 text-center rounded-full font-bold hover:bg-gray-600 transition">
+                Logout
+              </button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-70 hidden opacity-0 transition-opacity duration-300 z-40"></div>
+  </nav>
+
+
+  <!-- Disclaimer Popup -->
+<div id="disclaimer-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] hidden">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-[90%] p-6 text-center relative">
+    <h2 class="text-xl font-bold text-red-600 mb-3">⚠️ Project Disclaimer</h2>
+    <p class="text-gray-700 text-sm leading-relaxed mb-4">
+      This website is a <strong>student project</strong> created for educational purposes only.
+      It has <strong>no connection</strong> to any real restaurant or food service.
+      <br><br>
+      <span class="font-semibold">No actual food delivery will occur.</span>
+    </p>
+    <button id="close-disclaimer" class="mt-2 px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition">
+      I Understand
+    </button>
+  </div>
+</div>
+
+
+  <div class="hero w-full  min-h-[calc(100vh)] flex justify-center items-center absolute top-0 left-0 bg-black bg-opacity-50 pt-[70px]">
+      <div class="herodata flex flex-col items-center text-center mt-[-28vh]">
+              <div class="logo h-[150px] w-[150px] bg-cover bg-center bg-[url('/images/logo.png')] mb-6 md:h-[180px] md:w-[180px]"></div>
+              
+              <div class="brand flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4 font-playfair mb-3">
+                  <div class="royal text-white text-5xl md:text-8xl font-black tracking-wider">ROYAL</div>
+                  <div class="panda text-white text-5xl md:text-8xl font-black tracking-wider">PANDA</div>
+              </div>
+              
+              <div class="tagline text-rp-pink text-2xl md:text-4xl font-bold mt-2 md:mt-4 tracking-wide text-shadow-md">Taste Is Better With Pandas</div>
+          </div>
+      </div>
+      
+      <div class="order w-full absolute bottom-0 flex justify-center items-center pb-8 md:pb-12">
+          <form action="/order" method="get">
+              <div class="btn h-16 w-56 md:h-20 mt-[-22vh] md:w-64 bg-rp-red flex justify-center items-center text-xl md:text-3xl font-extrabold text-white rounded-[60px] cursor-pointer transition duration-300 hover:bg-red-700 hover:scale-110 shadow-xl shadow-rp-red/50">
+                <button type="submit" class="text-white no-underline font-system tracking-wider">ORDER NOW</button>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <div class="section2heading w-full bg-rp-section-bg p-8 text-center">
+      <div class="heading1 text-4xl md:text-6xl font-bold font-playfair text-gray-800">Our Signature Dishes</div>
+      <div class="heading2 text-lg md:text-xl font-light font-system text-gray-600 mt-3 max-w-3xl mx-auto">Experience our most popular and delicious creations, crafted for a flavour of royalty.</div>
+  </div>
+
+  <div class="section2 w-full bg-rp-section-bg flex justify-center items-center gap-8 py-8 px-4 md:px-16 flex-wrap">
+      
+      <div id="dishe" class="h-[520px] w-[320px] md:h-[540px] md:w-[350px] bg-rp-light-bg rounded-2xl relative p-4 shadow-lg transition duration-500 hover:scale-[1.03] hover:shadow-xl hover:shadow-gray-400/50">
+          <div class="item text-gray-800 text-2xl md:text-3xl text-center font-playfair font-bold mb-6"><h3>The Royal Pizza</h3></div>
+          <div class="pizzacard h-[260px] w-full bg-cover bg-center bg-[url('/images/pizza.png')] rounded-xl shadow-md"></div>
+          <div class="aboutitem text-sm md:text-base text-center p-2 text-gray-600 font-system mt-2">A classic cheese pizza with our special pizza sauce, fresh lettuce, and Veggies.</div>
+          <div class="order2 w-full absolute bottom-0 left-0 flex justify-center pb-4">
+              <div class="btn1 h-10 w-32 md:h-12 md:w-36 bg-rp-red flex justify-center items-center text-sm md:text-base font-bold text-white rounded-[50px] shadow-md transition duration-300 hover:bg-red-700 hover:scale-110">
+                  
+                  <a href="/order" class="text-white no-underline font-system">ORDER NOW</a>
+              </div>
+          </div>
+      </div>
+      
+      <div id="dishe" class="h-[520px] w-[320px] md:h-[540px] md:w-[350px] bg-rp-light-bg rounded-2xl relative p-4 shadow-lg transition duration-500 hover:scale-[1.03] hover:shadow-xl hover:shadow-gray-400/50">
+          <div class="item text-gray-800 text-2xl md:text-3xl text-center font-playfair font-bold mb-6"><h3>The Royal Burger</h3></div>
+          <div class="burgercard h-[260px] w-full bg-cover bg-center bg-[url('/images/burger.png')] rounded-xl shadow-md"></div>
+          <div class="aboutitem text-sm md:text-base text-center p-2 text-gray-600 font-system mt-2">A classic cheeseburger with our special sauce, fresh lettuce, and tomatoes.</div>
+          <div class="order2 w-full absolute bottom-0 left-0 flex justify-center pb-4">
+              <div class="btn1 h-10 w-32 md:h-12 md:w-36 bg-rp-red flex justify-center items-center text-sm md:text-base font-bold text-white rounded-[50px] shadow-md transition duration-300 hover:bg-red-700 hover:scale-110">
+                  <a href="/order" class="text-white no-underline font-system">ORDER NOW</a>
+              </div>
+          </div>
+      </div>
+      
+      <div id="dishe" class="h-[520px] w-[320px] md:h-[540px] md:w-[350px] bg-rp-light-bg rounded-2xl relative p-4 shadow-lg transition duration-500 hover:scale-[1.03] hover:shadow-xl hover:shadow-gray-400/50">
+          <div class="item text-gray-800 text-2xl md:text-3xl text-center font-playfair font-bold mb-6"><h3>The Royal Shake</h3></div>
+          <div class="shakecard h-[260px] w-full bg-cover bg-center bg-[url('/images/shake.jpg')] rounded-xl shadow-md"></div>
+          <div class="aboutitem text-sm md:text-base text-center p-2 text-gray-600 font-system mt-2">Rich and creamy milkshake, available in chocolate, vanilla, and strawberry.</div>
+          <div class="order2 w-full absolute bottom-0 left-0 flex justify-center pb-4">
+              <div class="btn1 h-10 w-32 md:h-12 md:w-36 bg-rp-red flex justify-center items-center text-sm md:text-base font-bold text-white rounded-[50px] shadow-md transition duration-300 hover:bg-red-700 hover:scale-110">
+                  <a href="/order" class="text-white no-underline font-system">ORDER NOW</a>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="section3 min-h-[70vh] w-full bg-rp-green font-system flex flex-col p-8">
+      <div class="navinfo py-8 w-full flex justify-center items-center">
+          <p id="p1" class="text-3xl md:text-5xl font-extrabold font-playfair text-gray-800 text-center">🐼 Hungry? Find Royal Panda on Google Maps</p>
+      </div>
+      <div class="location flex-grow w-full flex justify-center items-center pb-8">
+          <div class="map w-full h-full max-w-6xl">
+              <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d86696.8719331065!2d76.99388642667792!3d28.60265915384817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1b2d8d66646b%3A0x31ad9a2799bb7380!2sRoyal%20Panda!5e1!3m2!1sen!2sin!4v1754847576232!5m2!1sen!2sin" 
+                  class="w-full h-full rounded-3xl shadow-2xl shadow-gray-700/50 min-h-[300px]" 
+                  style="border:0;" 
+                  allowfullscreen="" 
+                  loading="lazy" 
+                  referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+          </div>
+      </div>
+  </div>
+
+  <div class="footer min-h-[120px] w-full text-white bg-rp-dark p-6 text-center flex flex-col justify-center items-center border-t-4 border-rp-red">
+      <div class="foot1 text-lg md:text-xl font-medium mb-3">Made with ❤️ and extra fries 🍟</div>
+      <div class="copyright text-xs md:text-sm flex flex-col gap-1 text-gray-300">
+          <div class="right">© 2025 Royal Panda</div>
+          <div class="reserve font-bold">All rights and fries reserved🍟</div> 
+      </div>
+  </div>
+      
+
+  <script>
+    const menuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeBtn = document.getElementById("close-menu");
+    const overlay = document.getElementById("menu-overlay");
+
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+    });
+
+    closeBtn.addEventListener("click", () => {
+      mobileMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    });
+
+    overlay.addEventListener("click", () => {
+      mobileMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    });
+  </script>
+  <script>
+  // Show disclaimer when site loads
+  window.addEventListener("load", () => {
+    const popup = document.getElementById("disclaimer-popup");
+    const closeBtn = document.getElementById("close-disclaimer");
+
+    popup.classList.remove("hidden");
+
+    closeBtn.addEventListener("click", () => {
+      popup.classList.add("hidden");
+    });
+  });
+</script>
+
+  </body>
+  </html>

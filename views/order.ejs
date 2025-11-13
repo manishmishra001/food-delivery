@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Royal Panda</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-50 text-gray-900">
+    <!-- Navbar -->
+    <%- include('./partials/nav') %>
+
+    <main class="p-6 relative">
+      <% 
+        const grouped = {};
+        dishes.forEach(dish => {
+          const category = dish.category.toLowerCase();
+          if (!grouped[category]) grouped[category] = [];
+          grouped[category].push(dish);
+        });
+
+        const displayNames = {
+          pizza: 'Pizza',
+          burger: 'Burger',
+          'garlic bread': 'Garlic Bread',
+          pasta: 'Pasta',
+          fries: 'Fries',
+          sandwich: 'Sandwich',
+          wraps: 'Wraps',
+          shakes: 'Shakes',
+          coffee: 'Coffee',
+          desserts: 'Desserts'
+        };
+
+        const displayOrder = Object.keys(displayNames);
+        const orderedCategories = [
+          ...displayOrder.filter(cat => grouped[cat]),
+          ...Object.keys(grouped).filter(cat => !displayOrder.includes(cat))
+        ];
+      %>
+
+      <% orderedCategories.forEach(cat => { %>
+        <section class="mb-10">
+          <h2 class="text-3xl font-semibold text-red-700 mb-4 border-b-2 border-red-600 pb-2">
+            <%= displayNames[cat] || cat.charAt(0).toUpperCase() + cat.slice(1) %>
+          </h2>
+
+          <div class="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-red-600">
+            <% grouped[cat].forEach((dish) => { %>
+              <div class="flex-none snap-center w-[280px] min-h-[300px]
+                          bg-white rounded-xl 
+                          border-t-4 border-red-600 
+                          shadow-[0_4px_10px_rgba(0,0,0,0.2)] 
+                          hover:shadow-[0_6px_15px_rgba(0,0,0,0.3)] 
+                          flex flex-col transition-shadow duration-300 dish-card">
+                
+                <!-- Dish Image -->
+                <div class="h-44">
+                  <img src="/<%= dish.photo.replace(/\\/g, "/") %>" 
+                       alt="<%= dish.name %>" 
+                       class="w-full h-full object-cover rounded-t-xl" />
+                </div>
+
+                <!-- Dish Info -->
+                <div class="p-3 flex flex-col flex-grow justify-between">
+                  <div>
+                    <h3 class="text-xl font-bold mb-1 text-red-600"><%= dish.name %></h3>
+                    <p class="text-sm text-gray-600 mb-2 min-h-[40px]"><%= dish.desc %></p>
+                  </div>
+
+                  <!-- Price and Actions -->
+                  <div>
+                    <% if (dish.priceType === 'half-full') { %>
+                      <div class="flex flex-col gap-2">
+                        <form action="/cart/add" method="POST">
+                          <input type="hidden" name="dishId" value="<%= dish._id %>">
+                          <input type="hidden" name="size" value="Half">
+                          <button type="submit"
+                            class="w-full flex justify-between items-center bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition shadow-md hover:shadow-lg">
+    
+                            <div class="flex flex-col items-start leading-tight">
+                              <span class="text-base font-semibold tracking-wide">Half</span>
+                              <span class="text-[11px] font-medium opacity-80">Add to cart</span>
+                            </div>
+
+                            <span class="text-lg font-bold bg-white text-red-600 px-3 py-[2px] rounded-md shadow-sm">
+                              ₹<%= dish.halfPrice || 0 %>
+                            </span>
+                          </button>
+                        </form>
+
+                        <form action="/cart/add" method="POST">
+                          <input type="hidden" name="dishId" value="<%= dish._id %>">
+                          <input type="hidden" name="size" value="Full">
+                          <button type="submit"
+                            class="w-full flex justify-between items-center bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition shadow-md hover:shadow-lg">
+
+                            <div class="flex flex-col items-start leading-tight">
+                              <span class="text-base font-semibold tracking-wide">Full</span>
+                              <span class="text-[11px] font-medium opacity-80">Add to cart</span>
+                            </div>
+
+                            <span class="text-lg font-bold bg-white text-red-600 px-3 py-[2px] rounded-md shadow-sm">
+                              ₹<%= dish.fullPrice || 0 %>
+                            </span>
+                          </button>
+                        </form>
+                      </div>
+                    <% } else { %>
+                      <!-- General Price Option with Add -> Qty -->
+                      <span class="text-2xl font-bold text-red-600">
+                        ₹<%= dish.generalPrice ?? dish.price ?? 0 %>
+                      </span>
+                      <div class="mt-2">
+                        <form action="/cart/add" method="POST" class="w-full add-form" data-dish-id="<%= dish._id %>" data-photo="/<%= dish.photo.replace(/\\/g, "/") %>">
+                          <input type="hidden" name="dishId" value="<%= dish._id %>" />
+                          <button
+                            type="submit"
+                            class="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition add-btn"
+                          >
+                            Add +
+                          </button>
+                        </form>
+
+                        <!-- Qty controls hidden initially -->
+                        <div class="flex items-center py-2 justify-center rounded-lg bg-red-600 gap-2 mt-1 qty-controls hidden" id="qty-controls-<%= dish._id %>">
+                          <button type="button" class="qty-btn px-2 py-1 bg-gray-200 rounded" data-action="minus">-</button>
+                          <span class="qty" id="qty-<%= dish._id %>">1</span>
+                          <button type="button" class="qty-btn px-2 py-1 bg-gray-200 rounded" data-action="plus">+</button>
+                        </div>
+                      </div>
+                    <% } %>
+                    <% if (user && user.role === 'admin') { %>
+                    <form action="/host/delete-dish/<%= dish._id %>" method="POST" class="mt-2 delete-dish-form" data-dish-id="<%= dish._id %>">
+                      <button 
+                        type="submit"
+                        class="delete-btn w-full bg-gray-300 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-400 transition">
+                        Delete
+                      </button>
+                    </form>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      <% }) %>
+    </main>
+
+    <!-- Topping Modal ... (unchanged) -->
+    <div id="toppingModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 px-4">
+      <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-[360px] text-center border-t-4 border-red-600">
+        <h2 id="modalTitle" class="text-2xl font-bold text-red-600 mb-4">Choose Toppings</h2>
+        <form id="toppingForm" action="/choose-topping" method="POST" class="space-y-3">
+          <input type="hidden" name="dishId" id="dishId" />
+          <div id="toppingOptions"></div>
+          <p id="toppingError" class="text-sm text-red-600 mt-1 min-h-[1.25rem]"></p>
+          <div class="flex gap-2 mt-4">
+            <button type="submit" class="flex-1 bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
+              Confirm
+            </button>
+            <button type="button" onclick="closeToppingModal()" class="flex-1 bg-gray-300 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-400 transition">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===================== Scripts ===================== -->
+    <script>
+      const btn = document.querySelector('button.mobile-menu-button');
+      const menu = document.querySelector('.mobile-menu');
+      if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+
+      let currentRequiredCount = 1;
+      const toppingsList = ['Onion','Capsicum','Corn','Tomato'];
+
+      function openToppingModal(dishId, requiredCount) {
+        currentRequiredCount = Number(requiredCount) || 1;
+        document.getElementById('dishId').value = dishId;
+        const options = document.getElementById('toppingOptions');
+        const title = document.getElementById('modalTitle');
+        const errorEl = document.getElementById('toppingError');
+        errorEl.textContent = '';
+
+        title.textContent = currentRequiredCount === 1
+          ? 'Choose 1 Topping'
+          : `Choose ${currentRequiredCount} Toppings`;
+
+        let html = '';
+        if (currentRequiredCount === 1) {
+          toppingsList.forEach((t, i) => {
+            html += `<label class="block bg-gray-100 hover:bg-red-100 py-2 rounded-lg cursor-pointer">
+              <input type="radio" name="topping" value="${t}" class="mr-2 accent-red-600" ${i===0?'required':''} /> ${t}
+            </label>`;
+          });
+        } else {
+          toppingsList.forEach(t => {
+            html += `<label class="block bg-gray-100 hover:bg-red-100 py-2 rounded-lg cursor-pointer">
+              <input type="checkbox" name="toppings[]" value="${t}" class="mr-2 accent-red-600 topping-checkbox" /> ${t}
+            </label>`;
+          });
+        }
+        options.innerHTML = html;
+
+        if (currentRequiredCount > 1) {
+          const boxes = options.querySelectorAll('input[type="checkbox"].topping-checkbox');
+          boxes.forEach(box => box.addEventListener('change', () => {
+            const checkedCount = options.querySelectorAll('input[type="checkbox"].topping-checkbox:checked').length;
+            boxes.forEach(b => b.disabled = !b.checked && checkedCount >= currentRequiredCount);
+            errorEl.textContent = '';
+          }));
+        }
+
+        const modal = document.getElementById('toppingModal');
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+      }
+
+      function closeToppingModal() {
+        const modal = document.getElementById('toppingModal');
+        document.getElementById('toppingOptions').innerHTML = '';
+        document.getElementById('toppingError').textContent = '';
+        document.getElementById('dishId').value = '';
+        modal.classList.add('hidden'); modal.classList.remove('flex');
+      }
+
+      document.getElementById('toppingForm').addEventListener('submit', function(e) {
+        const errorEl = document.getElementById('toppingError'); errorEl.textContent = '';
+        if (currentRequiredCount === 1) {
+          if (!document.querySelector('input[name="topping"]:checked')) {
+            e.preventDefault(); errorEl.textContent = 'Please select 1 topping.'; return false;
+          }
+        } else {
+          const checked = document.querySelectorAll('input[name="toppings[]"]:checked').length;
+          if (checked !== currentRequiredCount) {
+            e.preventDefault(); errorEl.textContent = `Please select exactly ${currentRequiredCount} toppings.`; return false;
+          }
+        }
+      });
+
+      function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const count = cart.reduce((acc, item) => acc + item.qty, 0);
+        const span = document.getElementById("cartCount");
+        if(span) span.textContent = count;
+      }
+
+      // =================== Cart Handling for all dishes ===================
+      document.querySelectorAll('form[action="/cart/add"]').forEach(form => {
+        form.addEventListener('submit', async e => {
+          e.preventDefault();
+          const dishId = form.querySelector('input[name="dishId"]').value;
+          const size = form.querySelector('input[name="size"]')?.value || null;
+          const res = await fetch(`/api/dishes/${dishId}`);
+          const dish = await res.json();
+
+          let cart = JSON.parse(localStorage.getItem("cart")) || [];
+          const existing = cart.find(item => item.dishId === dishId && item.size === size);
+          let price = 0;
+
+          if (dish.priceType === 'half-full') {
+            price = size === 'Half' ? dish.halfPrice : dish.fullPrice;
+          } else {
+            price = dish.generalPrice ?? dish.price ?? 0;
+          }
+
+          if (existing) existing.qty += 1;
+          else cart.push({ dishId, name: dish.name, price, size, qty: 1, photo: dish.photo });
+
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
+        });
+      });
+
+      updateCartCount();
+
+      document.querySelectorAll('.delete-dish-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const confirmed = confirm('Are you sure you want to delete this dish?');
+          if (!confirmed) return;
+
+          const btn = form.querySelector('.delete-btn');
+          btn.textContent = 'Deleting...';
+          btn.disabled = true;
+
+          const dishId = form.dataset.dishId;
+          const card = form.closest('.dish-card');
+          card.classList.add('opacity-0', 'scale-90', 'transition', 'duration-500');
+
+          setTimeout(async () => {
+            try {
+              const res = await fetch(`/host/delete-dish/${dishId}`, { method: 'POST' });
+              if (res.ok) card.remove();
+              else {
+                alert('Failed to delete dish.');
+                btn.textContent = 'Delete';
+                btn.disabled = false;
+                card.classList.remove('opacity-0', 'scale-90');
+              }
+            } catch {
+              alert('Error deleting dish.');
+              btn.textContent = 'Delete';
+              btn.disabled = false;
+              card.classList.remove('opacity-0', 'scale-90');
+            }
+          }, 400);
+        });
+      });
+
+      // =================== General Dishes: Add → Qty toggle ===================
+      document.querySelectorAll('.dish-card').forEach(card => {
+        const addForm = card.querySelector('form.add-form');
+        if (!addForm) return;
+
+        const dishId = addForm.dataset.dishId;
+        const qtyControls = document.getElementById(`qty-controls-${dishId}`);
+        const qtySpan = qtyControls.querySelector('.qty');
+
+        // Add button click
+        addForm.addEventListener('submit', e => {
+          e.preventDefault();
+
+          let cart = JSON.parse(localStorage.getItem("cart")) || [];
+          let existing = cart.find(item => item.dishId === dishId && !item.size);
+
+          let price = parseInt(card.querySelector('span.text-2xl').textContent.replace('₹',''),10);
+          // Prefer data-photo on the form; fallback to card image src
+          const photo = addForm.dataset.photo || card.querySelector('img')?.getAttribute('src') || '';
+
+          if (existing) existing.qty += 1;
+          else cart.push({ dishId, name: card.querySelector('h3').textContent, price, size: null, qty: 1, photo });
+
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartCount();
+
+          addForm.style.display = 'none';
+          qtyControls.classList.remove('hidden');
+          qtySpan.textContent = existing ? existing.qty : 1;
+        });
+
+        // +/- buttons
+        qtyControls.querySelectorAll('.qty-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const item = cart.find(i => i.dishId === dishId && !i.size);
+            if (!item) return;
+
+            if (btn.dataset.action === 'plus') item.qty += 1;
+            if (btn.dataset.action === 'minus') item.qty -= 1;
+
+            if (item.qty < 1) {
+              cart = cart.filter(i => i.dishId !== dishId || i.size);
+              qtyControls.classList.add('hidden');
+              addForm.style.display = 'block';
+            } else {
+              qtySpan.textContent = item.qty;
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+          });
+        });
+      });
+
+
+      
+    </script>
+    <script>
+  // ✅ Improved qty toggle for half/full dishes (non-destructive)
+  document.querySelectorAll('form[action="/cart/add"] input[name="size"]').forEach(input => {
+    const form = input.closest('form');
+    const size = input.value;
+    const dishId = form.querySelector('input[name="dishId"]').value;
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      const dishCard = form.closest('.dish-card');
+      const name = dishCard.querySelector('h3').textContent.trim();
+      const photo = dishCard.querySelector('img')?.getAttribute('src') || '';
+      const priceText = btn.textContent.replace(/[^0-9]/g, '');
+      const price = parseInt(priceText, 10) || 0;
+
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let existing = cart.find(item => item.dishId === dishId && item.size === size);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ dishId, name, price, size, qty: 1, photo });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+
+      // Hide the button & show qty controls
+      btn.style.display = 'none';
+      let qtyDiv = form.nextElementSibling;
+      if (!qtyDiv || !qtyDiv.classList.contains('halffull-qty')) {
+        qtyDiv = document.createElement('div');
+        qtyDiv.className =
+          'halffull-qty flex items-center justify-center gap-3 mt-2 bg-red-600 text-white py-1 rounded-lg transition';
+        qtyDiv.innerHTML = `
+          <button class="minus bg-white text-red-600 px-2 rounded font-bold">−</button>
+          <span class="count text-lg font-semibold">${existing ? existing.qty : 1}</span>
+          <button class="plus bg-white text-red-600 px-2 rounded font-bold">+</button>
+        `;
+        form.insertAdjacentElement('afterend', qtyDiv);
+      } else {
+        qtyDiv.querySelector('.count').textContent = existing ? existing.qty : 1;
+      }
+
+      // Add functionality to +/− buttons
+      qtyDiv.querySelectorAll('button').forEach(btnEl => {
+        btnEl.onclick = () => {
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const item = cart.find(i => i.dishId === dishId && i.size === size);
+          if (!item) return;
+
+          if (btnEl.classList.contains('plus')) item.qty += 1;
+          if (btnEl.classList.contains('minus')) item.qty -= 1;
+
+          if (item.qty < 1) {
+            cart = cart.filter(i => !(i.dishId === dishId && i.size === size));
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            qtyDiv.remove();
+            btn.style.display = 'flex';
+            return;
+          }
+
+          localStorage.setItem('cart', JSON.stringify(cart));
+          qtyDiv.querySelector('.count').textContent = item.qty;
+          updateCartCount();
+        };
+      });
+    });
+  });
+</script>
+
+  </body>
+</html>

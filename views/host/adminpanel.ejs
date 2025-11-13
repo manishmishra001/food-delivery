@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Royal Panda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+   <nav class="bg-gradient-to-r from-red-700 to-red-600 text-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+
+    <!-- Logo & Title -->
+    <div class="flex items-center gap-3">
+      <img src="/images/panda.png" alt="Logo" class="w-10 h-10 rounded-full shadow-md">
+      <span class="text-2xl md:text-3xl font-extrabold tracking-tight text-yellow-300">
+        Royal Panda <span class="text-white font-semibold">Admin</span>
+      </span>
+    </div>
+
+    <!-- Desktop Buttons -->
+    <div class="hidden md:flex items-center gap-3">
+      <a href="/" class="flex items-center gap-1 bg-white text-red-700 px-4 py-2 rounded-lg font-semibold shadow-md hover:scale-105 hover:shadow-xl transition transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
+        </svg>
+        Home
+      </a>
+
+      <form action="/host/add-dish" method="get">
+        <button type="submit" class="flex items-center gap-2 bg-yellow-400 text-red-700 px-4 py-2 rounded-lg font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition transform">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Add Dish
+        </button>
+      </form>
+
+      <a href="/auth/logout" class="flex items-center gap-1 bg-white text-red-700 px-4 py-2 rounded-lg font-semibold shadow-md hover:scale-105 hover:shadow-xl transition transform">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+        </svg>
+        Logout
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-menu" class="fixed top-0 left-0 w-2/3 h-screen bg-red-700 transform -translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col justify-between text-white">
+    <div class="p-6 flex flex-col flex-grow">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <img src="/images/panda.png" alt="Logo" class="w-10 h-10 rounded-full shadow-md">
+          <span class="text-2xl font-bold text-yellow-300">Royal Panda Admin</span>
+        </div>
+        <button id="close-menu" class="text-white focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <ul class="flex flex-col gap-4 font-semibold">
+        <li>
+          <a href="/" class="block py-2 px-4 bg-white text-red-700 rounded-lg shadow-md hover:scale-105 hover:shadow-xl transition transform flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
+            </svg>
+            Home
+          </a>
+        </li>
+        <li>
+          <form action="/host/add-dish" method="get">
+            <button type="submit" class="flex items-center gap-2 w-full py-2 px-4 bg-yellow-400 text-red-700 rounded-lg font-bold shadow-lg hover:scale-105 hover:shadow-2xl transition transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Dish
+            </button>
+          </form>
+        </li>
+        <li>
+          <a href="/auth/logout" class="flex items-center gap-2 w-full py-2 px-4 bg-white text-red-700 rounded-lg shadow-md hover:scale-105 hover:shadow-xl transition transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+            </svg>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden opacity-0 z-40 transition-opacity duration-300"></div>
+
+  <script>
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('close-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOverlay = document.getElementById('menu-overlay');
+
+    function toggleMenu() {
+      mobileMenu.classList.toggle('-translate-x-full');
+      menuOverlay.classList.toggle('hidden');
+      menuOverlay.classList.toggle('opacity-100');
+      document.body.classList.toggle('overflow-hidden');
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    closeBtn.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+  </script>
+</nav>
+
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-10 py-10">
+      <h2 class="text-3xl font-bold mb-6 text-red-600 text-center">Orders Overview</h2>
+
+      <% if (orders && orders.length > 0) { %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm border-collapse shadow-lg rounded-lg overflow-hidden">
+            <thead class="bg-red-600 text-white">
+              <tr>
+                <th class="py-3 px-4">Order ID</th>
+                <th class="py-3 px-4">Customer</th>
+                <th class="py-3 px-4">Mobile</th>
+                <th class="py-3 px-4">Address</th>
+                <th class="py-3 px-4">Items</th>
+                <th class="py-3 px-4">Total</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Action</th>
+              </tr>
+            </thead>
+
+            <tbody class="bg-white">
+              <% orders.forEach(order => { %>
+                <tr class="border-b hover:bg-gray-50 transition-all duration-300">
+                  <td class="py-2 px-4 text-gray-700"><%= order._id %></td>
+                  <td class="py-2 px-4 font-semibold text-gray-800"><%= order.userId?.name || 'Unknown' %></td>
+                  <td class="py-2 px-4 text-gray-700"><%= order.userId?.mobile || order.mobile || 'N/A' %></td>
+                  <td class="py-2 px-4 text-gray-700">
+                    <% if (order.address) { %>
+                      <%= order.address.street %>, <%= order.address.city %>, <%= order.address.state %> - <%= order.address.pincode %>, <%= order.address.country %>
+                    <% } else { %>
+                      <span class="text-gray-500">N/A</span>
+                    <% } %>
+                  </td>
+                  <td class="py-2 px-4">
+                    <% if (order.items && order.items.length) { %>
+                      <% order.items.forEach(item => { %>
+                        <div><%= item.name %> x<%= item.qty %></div>
+                      <% }) %>
+                    <% } else { %>
+                      <span class="text-gray-500">No items</span>
+                    <% } %>
+                  </td>
+                  <td class="py-2 px-4 font-semibold text-gray-800">₹<%= order.total %></td>
+                  <td class="py-2 px-4 font-semibold text-gray-800"><%= order.status %></td>
+                  <td class="py-2 px-4">
+                    <% if (order.status !== 'Delivered') { %>
+                      <form action="/host/admin/<%= order._id %>/status" method="POST" class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                        <select name="status" class="border px-2 py-1 rounded">
+                          <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                          <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                          <option value="Dispatched" <%= order.status === 'Dispatched' ? 'selected' : '' %>>Dispatched</option>
+                          <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                        </select>
+                        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition w-full sm:w-auto">Update</button>
+                      </form>
+                    <% } else { %>
+                      <span class="text-green-600 font-semibold">Delivered</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="text-center text-gray-600 text-lg mt-10">No orders found.</p>
+      <% } %>
+    </main>
+
+    <!-- JS for Delivered Animation -->
+    <script>
+      document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+          const select = this.querySelector('select[name="status"]');
+          if (select.value === 'Delivered') {
+            this.classList.add('opacity-0', 'scale-90'); 
+            setTimeout(() => {
+              const deliveredLabel = document.createElement('span');
+              deliveredLabel.className = 'text-green-600 font-semibold';
+              deliveredLabel.textContent = 'Delivered';
+              this.parentNode.replaceChild(deliveredLabel, this);
+            }, 500);
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choose a Topping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="flex items-center justify-center h-screen bg-gray-100">
+    <!-- ✅ Popup Box -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 w-[300px] text-center border-t-4 border-red-600">
+      <h2 class="text-2xl font-bold text-red-600 mb-4">Choose Your Topping</h2>
+
+      <form action="/add-topping" method="POST" class="space-y-3">
+        <!-- Radio Buttons -->
+        <label class="block bg-gray-100 hover:bg-red-100 py-2 rounded-lg cursor-pointer">
+          <input type="radio" name="topping" value="Onion" class="mr-2 accent-red-600" required />
+          🧅 Onion
+        </label>
+
+        <label class="block bg-gray-100 hover:bg-red-100 py-2 rounded-lg cursor-pointer">
+          <input type="radio" name="topping" value="Capsicum" class="mr-2 accent-red-600" />
+          🫑 Capsicum
+        </label>
+
+        <label class="block bg-gray-100 hover:bg-red-100 py-2 rounded-lg cursor-pointer">
+          <input type="radio" name="topping" value="Corn" class="mr-2 accent-red-600" />
+          🌽 Corn
+        </label>
+
+        <label class="block bg-gray-100 hover:bg-red-100 py-2 rounded-lg cursor-pointer">
+          <input type="radio" name="topping" value="Tomato" class="mr-2 accent-red-600" />
+          🍅 Tomato
+        </label>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="mt-4 w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition">
+          Confirm
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

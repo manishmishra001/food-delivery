@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Panda — Preparing Your Order 🍱</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(180deg, #fff8f0, #ffe9d2);
+      overflow-x: hidden;
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .float { animation: float 6s ease-in-out infinite; opacity: 0.7; }
+
+    /* Panda bounce */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .animate-bounce-smooth {
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    /* Pulse text */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .animate-pulse-text { animation: pulse 2s ease-in-out infinite; }
+  </style>
+</head>
+<body class="flex flex-col items-center min-h-screen bg-[url('/images/waiting-bg.png')] ">
+  
+  <section class="relative w-full flex flex-col items-center pt-4 pb-4">
+    <img src="/images/delivery.png" alt="Royal Panda" class="w-40 md:w-48 animate-bounce-smooth drop-shadow-xl z-10">
+    <h1 class="text-3xl md:text-4xl text-gray-800 mt-4 animate-pulse-text">Cooking up your order 🍜</h1>
+    <p class="text-gray-600 text-lg mt-1">Hang tight! The Royal Panda chef is preparing your feast.</p>
+  </section>
+
+  <!-- Bottom: Order Details -->
+  <section class="bg-white/80 backdrop-blur-xl shadow-2xl rounded-2xl p-6 w-full max-w-lg text-gray-800 mb-12">
+    <h2 class="text-2xl font-bold text-red-600 mb-4 border-b-2 border-red-200 pb-2">Order Details</h2>
+
+    <p class="mb-2"><strong>Order ID:</strong> <%= order._id %></p>
+    <p class="mb-2"><strong>Customer:</strong> <%= order.userName %></p>
+    <p class="mb-2"><strong>Mobile:</strong> <%= order.mobile %></p>
+    <p class="mb-2"><strong>Address:</strong>
+      <%= order.address.street %>, <%= order.address.city %>,
+      <%= order.address.state %>, <%= order.address.country %> - <%= order.address.pincode %>
+    </p>
+    <p class="mb-2"><strong>Payment:</strong> <%= order.paymentMethod %></p>
+    <p class="mb-4"><strong>Total:</strong> ₹<%= order.total %></p>
+
+    <div class="mb-4">
+      <strong>Items Ordered:</strong>
+      <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+        <% order.items.forEach(item => { %>
+          <li><%= item.name %> × <%= item.qty %> — ₹<%= item.price * item.qty %></li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <!-- Single Full-Width Button -->
+    <div class="mt-6">
+      <a href="/order"
+         class="flex justify-center items-center w-full bg-red-600 text-white py-3 rounded-xl font-semibold shadow-lg border border-red-200 hover:bg-red-700 transition">
+         Continue Shopping
+      </a>
+    </div>
+  </section>
+
+  <footer class="text-gray-400 text-sm mb-6">© 2025 Royal Panda — Fresh. Fast. Fun. 🐼</footer>
+
+  <script>
+    // floating animation enhancement
+    document.querySelectorAll('.float').forEach((icon, i) => {
+      let angle = 0;
+      setInterval(() => {
+        icon.style.transform = `translateY(${Math.sin(angle) * 10}px) rotate(${Math.sin(angle) * 6}deg)`;
+        angle += 0.05 + (i * 0.01);
+      }, 40);
+    });
+  </script>
+</body>
+</html>

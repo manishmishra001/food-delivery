@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Pizza Menu</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-poppins bg-pink-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-bold text-pink-600 mb-2">Our Delicious Menu</h1>
+            <p class="text-xl text-gray-600">Freshly made pizzas, pastas, and sides for your perfect meal!</p>
+        </header>
+
+        <div class="flex flex-wrap justify-center mb-8 space-x-2 md:space-x-4">
+            <input type="radio" name="menu_tab" id="tab_pan_pizzas" class="hidden peer" checked>
+            <label for="tab_pan_pizzas" class="cursor-pointer text-lg md:text-xl font-semibold px-4 py-2 rounded-full transition duration-300
+                          bg-pink-200 text-pink-700 hover:bg-pink-300
+                          peer-checked:bg-pink-600 peer-checked:text-white peer-checked:shadow-lg">
+                Pan Pizza's
+            </label>
+
+            <input type="radio" name="menu_tab" id="tab_pasta_pizza" class="hidden peer">
+            <label for="tab_pasta_pizza" class="cursor-pointer text-lg md:text-xl font-semibold px-4 py-2 rounded-full transition duration-300
+                          bg-pink-200 text-pink-700 hover:bg-pink-300
+                          peer-checked:bg-pink-600 peer-checked:text-white peer-checked:shadow-lg">
+                Pasta Pizza
+            </label>
+
+            <input type="radio" name="menu_tab" id="tab_garlic_bread" class="hidden peer">
+            <label for="tab_garlic_bread" class="cursor-pointer text-lg md:text-xl font-semibold px-4 py-2 rounded-full transition duration-300
+                          bg-pink-200 text-pink-700 hover:bg-pink-300
+                          peer-checked:bg-pink-600 peer-checked:text-white peer-checked:shadow-lg">
+                Garlic Bread
+            </label>
+        </div>
+
+        <section id="content_pan_pizzas" class="tab-content hidden peer-checked:block">
+            <h2 class="text-4xl font-semibold text-pink-500 mb-6 pb-2 border-b-2 border-pink-300">Pan Pizza's</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Veg. Single Pizza</h3>
+                        <p class="text-gray-600 mb-4">Choose your one topping for a base price of 70/-</p>
+                        <div class="mb-4 text-gray-700 text-lg">
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="radio" name="veg_single_topping" value="onion" class="mr-2 accent-pink-500" required> Onion
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="radio" name="veg_single_topping" value="capsicum" class="mr-2 accent-pink-500"> Capsicum
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="radio" name="veg_single_topping" value="corn" class="mr-2 accent-pink-500"> Corn
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="radio" name="veg_single_topping" value="tomato" class="mr-2 accent-pink-500"> Tomato
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">70/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Veg Double Pan Pizza (2 Toppings)</h3>
+                        <p class="text-gray-600 mb-4 font-bold text-rose-500">Includes two toppings in the 90/- price.</p>
+                        <div class="mb-4 text-gray-700 text-lg">
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="veg_double_toppings" value="onion" class="mr-2 accent-pink-500"> Onion
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="veg_double_toppings" value="capsicum" class="mr-2 accent-pink-500"> Capsicum
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="veg_double_toppings" value="corn" class="mr-2 accent-pink-500"> Corn
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="veg_double_toppings" value="tomato" class="mr-2 accent-pink-500"> Tomato
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="veg_double_toppings" value="jalapeno" class="mr-2 accent-pink-500"> Jalapeno
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">90/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Tri Colour Pizza</h3>
+                        <p class="text-gray-600 mb-4">Onion, capsicum and corn</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">100/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Paneer Pizza</h3>
+                        <p class="text-gray-600 mb-4">Onion And Paneer</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">110/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Veg. Loaded Pizza</h3>
+                        <p class="text-gray-600 mb-4">Onion, capsicum, corn, tomato and jalepino</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">120/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Margherita Pizza</h3>
+                        <p class="text-gray-600 mb-4">Mozzarella and cheddar cheese with one topping</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">130/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Double Cheese Pizza</h3>
+                        <p class="text-gray-600 mb-4">Extra mozzarella & cheddar cheese with one veg topping</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">160/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Spicy Paneer Pizza</h3>
+                        <p class="text-gray-600 mb-4">Paneer, Onion, Jalepino and red peprika</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">170/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Farm House Pizza</h3>
+                        <p class="text-gray-600 mb-4">Onion, Capsicum, Corn & Tomato</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">170/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="content_pasta_pizza" class="tab-content hidden peer-checked:block">
+            <h2 class="text-4xl font-semibold text-pink-500 mb-6 pb-2 border-b-2 border-pink-300">Pasta Pizza</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Pasta Pizza</h3>
+                        <p class="text-gray-600 mb-4">(pasta Topping Over Pizza)</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">160/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Extra Veganzza Pizza</h3>
+                        <p class="text-gray-600 mb-4">Onion, Corn, Capsicum, Jalepino, Redpeprika, Black Olives</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">190/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Punjabi Tadka Pizza</h3>
+                        <p class="text-gray-600 mb-4">Chilli Paneer, Onion, Corn, Capsicum, Red Peprika And Jalepino (ADD ON)</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">200/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Any Vegetable</h3>
+                        <p class="text-gray-600 mb-4">@ 20rs (or) Paneer @30rs</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">ADD ON</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Extra Cheese Blend</h3>
+                        <p class="text-gray-600 mb-4">@30rs</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">ADD ON</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="content_garlic_bread" class="tab-content hidden peer-checked:block">
+            <h2 class="text-4xl font-semibold text-pink-500 mb-6 pb-2 border-b-2 border-pink-300">Garlic Bread</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Plain Garlic Bread Stick</h3>
+                        <p class="text-gray-600 mb-4"></p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">70/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Cheesy Garlic Bread Stick</h3>
+                        <p class="text-gray-600 mb-4"></p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">90/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Four Piece Garlic Bread</h3>
+                        <p class="text-gray-600 mb-4">Topping with:</p>
+                        <div class="mb-4 text-gray-700 text-lg">
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="garlic_bread_topping_cheese" value="cheese" class="mr-2 accent-pink-500"> Cheese
+                            </label>
+                            <label class="flex items-center mb-1 cursor-pointer">
+                                <input type="checkbox" name="garlic_bread_topping_veg" value="vegetables" class="mr-2 accent-pink-500"> Vegetables
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">70/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Stuffed Garlic Bread Stick</h3>
+                        <p class="text-gray-600 mb-4">Cheesy Corn and Jalepino with Cheese</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">110/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition duration-200 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-2">Paneer garlic Bread</h3>
+                        <p class="text-gray-600 mb-4">Paneer Onion and Cheese</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-pink-700">120/-</span>
+                        <button class="bg-rose-500 text-white py-2 px-4 rounded-full font-semibold transition duration-200 ease-in-out hover:bg-rose-600">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
