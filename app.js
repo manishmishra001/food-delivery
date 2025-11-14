@@ -116,7 +116,7 @@ app.get('/login', (req, res) => {
 });
 
 // MongoDB connection and server start
-const PORT = 3001;
+const PORT = process.env.PORT || 3002;
 // Replace with actual connection string securely in a real app
 
 mongoose.connect(mongoUri)
