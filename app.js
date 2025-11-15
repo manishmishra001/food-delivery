@@ -1,4 +1,7 @@
 const path = require('path');
+
+require("dotenv").config();
+
 // External Modules
 const express = require('express');
 const mongoose = require('mongoose');
@@ -16,13 +19,10 @@ const hostRouter = require("./routes/hostRouter");
 const cartRouter = require("./routes/cartRouter");
 const authRouter = require("./routes/authRouter");
 
-
-const mongoUri = "mongodb+srv://manish1525t_db_user:royalpanda123@royalpanda.yg0sjwc.mongodb.net/?retryWrites=true&w=majority&appName=royalpanda";
-
 const store = new MongoDBStore({
-  uri: mongoUri,
-  collection : 'session'
-}) 
+  uri: process.env.MONGO_URI,
+  collection: 'sessions'
+}); 
 
 // Middleware to serve static files and parse request body
 app.use(express.static('public'));
@@ -30,14 +30,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
+
 app.use(session({
-  secret: "yoursecretkey",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
 }));
+
 
 
 // app.use((req, res, next) => {
@@ -116,10 +118,9 @@ app.get('/login', (req, res) => {
 });
 
 // MongoDB connection and server start
-const PORT = process.env.PORT || 3002;
-// Replace with actual connection string securely in a real app
+const PORT = process.env.PORT || 3001;
 
-mongoose.connect(mongoUri)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
