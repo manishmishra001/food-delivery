@@ -35,6 +35,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: store,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
@@ -123,7 +124,7 @@ const PORT = process.env.PORT || 3001;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
+    app.listen(PORT,"0.0.0.0", () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
   })
